@@ -74,25 +74,25 @@ python main.py gui
 
 Run the following commands to evaluate the performance of the implemented algorithms
 
-# Launch GUI
+## Launch GUI
 python main.py gui
 
-# Solve using SAT Solver (N = 8)
+## Solve using SAT Solver (N = 8)
 python main.py sat -n 8
 
-# Solve using Standard Min-Conflicts (N = 50)
+## Solve using Standard Min-Conflicts (N = 50)
 python main.py mc -n 50 --seed 1
 
-# Solve using Heuristic Min-Conflicts (N = 50)
+## Solve using Heuristic Min-Conflicts (N = 50)
 python main.py mc-heuristic -n 50 --seed 1
 
-# Benchmark SAT Solver (default sizes)
+## Benchmark SAT Solver (default sizes)
 python main.py bench-sat
 
-# Benchmark SAT Solver (N = 4, 8, 16, 32)
+## Benchmark SAT Solver (N = 4, 8, 16, 32)
 python main.py bench-sat --sizes 4 8 16 32
 
-# Benchmark Min-Conflicts (20 runs)
+## Benchmark Min-Conflicts (20 runs)
 python main.py bench-mc --runs 20
 
 ---
