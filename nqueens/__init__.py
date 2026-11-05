@@ -1,0 +1,1 @@
+"""N-Queens: Propositional Logic (SAT) and Local Search (Min-Conflicts)."""
