@@ -1,55 +1,117 @@
-# Task 1 – N-Queens: Propositional Logic & Local Search
+# Task 1: N-Queens Solver
+### Propositional Logic (SAT Solver) & Local Search (Min-Conflicts)
 
-## 1. Yêu cầu hệ thống (Prerequisites)
-- Python >= 3.9 (Khuyến nghị dùng **Python 3.11** để đảm bảo thư viện PySAT có sẵn bản cài đặt (wheel) ổn định trên Windows)
+An Object-Oriented Python implementation of the **N-Queens Problem**, featuring two solving approaches:
 
-## 2. Cài đặt (Installation)
+- **Propositional Logic (SAT Solver):** Models the N-Queens problem using logical constraints and solves it with PySAT (Glucose3).
+- **Local Search (Min-Conflicts):** Implements Standard and Heuristic Min-Conflicts algorithms to find valid solutions efficiently.
 
-### Dành cho macOS / Linux (Môi trường chấm điểm)
-```bash
-# Tạo và chạy hoạt môi trường ảo
-## Mac
-python3 -m venv venv
-source venv/bin/activate
+The project also includes a **Tkinter GUI** for interactive board visualization and experimental benchmarks for performance evaluation.
 
-## Window
-py -3.11 -m venv venv
-.\venv\Scripts\Activate.ps1
+---
 
-# Cài đặt thư viện
-pip install -r requirements.txt
+## Project Structure
+
+```text
+AI_Task1/
+│
+├── nqueens/
+│   ├── __init__.py
+│   ├── models.py           # Data models (Board, SolveResult, base class)
+│   ├── constraints.py      # Constraint discovery and CNF conversion
+│   ├── sat_solver.py       # SAT Solver using PySAT (Glucose3)
+│   ├── min_conflicts.py    # Local Search (Standard & Heuristic variants)
+│   ├── benchmark.py        # Experimental evaluation script
+│   └── gui.py              # Tkinter GUI for board visualization
+│
+├── main.py                 # Entry point (CLI commands & GUI launcher)
+├── task1_nqueens.ipynb     # Jupyter Notebook with experimental results
+├── requirements.txt        # Project dependencies
+└── README.md               # Project documentation
 ```
 
-## 3. Run (Usage)
+---
+
+## Installation & Setup
+
+### 1. Create a Virtual Environment
+
+Python **3.11** is recommended.
+
+**Windows (PowerShell):**
+
+```powershell
+py -3.11 -m venv venv
+.\venv\Scripts\Activate.ps1
+```
+
+**macOS / Linux:**
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 2. Install Dependencies
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+---
+
+## Running the Application
+
+### 1. Interactive GUI
+
+Launch the Tkinter graphical interface to visualize the N-Queens board and observe the solving process.
 
 ```bash
 python main.py gui
+```
+
+### 2. Experimental Benchmarks
+
+Run the following commands to evaluate the performance of the implemented algorithms
+
+# Launch GUI
+python main.py gui
+
+# Solve using SAT Solver (N = 8)
+python main.py sat -n 8
+
+# Solve using Standard Min-Conflicts (N = 50)
+python main.py mc -n 50 --seed 1
+
+# Solve using Heuristic Min-Conflicts (N = 50)
+python main.py mc-heuristic -n 50 --seed 1
+
+# Benchmark SAT Solver (default sizes)
 python main.py bench-sat
-python main.py bench-sat --sizes 4 8 12 16 20 24 32
+
+# Benchmark SAT Solver (N = 4, 8, 16, 32)
+python main.py bench-sat --sizes 4 8 16 32
+
+# Benchmark Min-Conflicts (20 runs)
 python main.py bench-mc --runs 20
 
-## Cấu trúc
-| File | Vai trò |
-|---|---|
-| `nqueens/models.py` | `Board`, `SolveResult`, lớp cơ sở `QueensSolver` |
-| `nqueens/constraints.py` | `ConstraintDiscoverer` (tìm ràng buộc), `CNFConverter` (→ CNF) |
-| `nqueens/sat_solver.py` | `SATQueensSolver` dùng `Glucose3` |
-| `nqueens/min_conflicts.py` | `MinConflictsSolver`, `MaxConflictMinConflictsSolver` (heuristic) |
-| `nqueens/benchmark.py` | Thực nghiệm |
-| `nqueens/gui.py` | Giao diện Tkinter |
+---
 
-## Mô hình hóa mệnh đề (Req 1)
-- Biến `X(r,c)` = True nếu ô (r,c) có hậu; mã hóa `r*N + c + 1`.
-- Ràng buộc:
-  - **ALO** mỗi hàng, mỗi cột: `(X(r,0) ∨ ... ∨ X(r,N-1))` → N hậu.
-  - **AMO** mỗi hàng, cột, đường chéo chính (r−c), chéo phụ (r+c): `⋀ (¬a ∨ ¬b)` với mọi cặp ô trong cùng đường.
-- Thuật toán khám phá: gom ô theo khóa `r`, `c`, `r−c`, `r+c` (O(N²)); mỗi nhóm sinh ràng buộc.
-- Chuyển CNF: ALO → 1 mệnh đề dạng OR; AMO → C(k,2) mệnh đề 2-literal. Tất cả đã ở dạng CNF, không cần biến phụ.
-- Số mệnh đề xấp xỉ O(N³).
+## Experimental Results
 
-## Min-Conflicts (Req 3)
-- Trạng thái: mỗi cột 1 hậu (loại sẵn xung đột cột); biến = cột, giá trị = hàng.
-- Chuẩn: chọn ngẫu nhiên cột đang xung đột, đặt vào hàng ít xung đột nhất.
-- Heuristic đề xuất (**MaxConflict + noise**): chọn cột có nhiều xung đột nhất (hòa → ngẫu nhiên), với xác suất 10% chọn ngẫu nhiên để tránh kẹt.
-- Đếm xung đột O(1) bằng mảng đếm hàng/đường chéo.
-- Dùng `bench-mc` để so sánh tỉ lệ thành công, số bước, thời gian trung bình.
+Experimental outputs and performance evaluations are documented in:
+
+- `task1_nqueens.ipynb` – Jupyter Notebook containing the experimental results and analysis.
+
+---
+
+## Technologies Used
+
+- **Python 3.11**
+- **PySAT** – SAT solving with Glucose3
+- **Tkinter** – Graphical User Interface
+- **Jupyter Notebook** – Experimental evaluation
+
+---
+
+**Developed for AI Task 1 – N-Queens Problem.**
