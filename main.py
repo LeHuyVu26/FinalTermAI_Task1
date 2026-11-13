@@ -1,15 +1,12 @@
-"""Entry point: python main.py {gui|sat|mc|bench-sat|bench-mc} ..."""
 import argparse
 
 from nqueens.models import Board
-
 
 def show(result):
     print(f"[{result.solver}] N={result.n} solved={result.solved} time={result.time_s:.4f}s "
           f"steps={result.steps} vars={result.num_vars} clauses={result.num_clauses}")
     if result.queens and result.n <= 20:
         print(Board.to_text(result.queens))
-
 
 def main():
     p = argparse.ArgumentParser(description="N-Queens: SAT & Min-Conflicts")
